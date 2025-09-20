@@ -1,37 +1,37 @@
-Este proyecto se adhiere a las siguientes reglas y principios de desarrollo para mantener la consistencia y la calidad del código. Por favor, tenlos en cuenta al sugerir o generar código.
+This project adheres to the following development rules and principles to maintain code consistency and quality. Please keep them in mind when suggesting or generating code.
 
-1. Stack Tecnológico
-Evitar bibliotecas y frameworks externos: El código debe ser 100% nativo. No se deben utilizar librerías de terceros como jQuery, Bootstrap o React.
+1. Technology Stack
+Avoid external libraries and frameworks: The code must be 100% native. Third-party libraries such as jQuery, Bootstrap, or React should not be used.
 
-Tecnologías permitidas: Usa únicamente HTML5, CSS3 y JavaScript (ES6+) para la lógica de la aplicación.
+Allowed technologies: Use only HTML5, CSS3, and JavaScript (ES6+) for the application logic.
 
-2. Organización del Proyecto
-El código debe estar bien estructurado en las siguientes carpetas para facilitar la navegación y el mantenimiento:
+2. Project Organization
+The code should be well-structured in the following folders to facilitate navigation and maintenance:
 
-src/: Contiene el código fuente principal.
+src/: Contains the main source code.
 
-js/: Para todos los archivos de JavaScript.
+js/: For all JavaScript files.
 
-css/: Para todas las hojas de estilo.
+css/: For all stylesheets.
 
-assets/: Para recursos como imágenes, fuentes y videos.
+assets/: For resources such as images, fonts, and videos.
 
-index.html: Archivo principal en la raíz del proyecto.
+index.html: Main file at the project root.
 
-3. Principios de Código
-SOLID: En la medida de lo posible, el código JavaScript debe seguir los principios de SOLID para un diseño modular y de fácil mantenimiento.
+3. Code Principles
+SOLID: As much as possible, JavaScript code should follow SOLID principles for modular and maintainable design.
 
-S (Single Responsibility Principle): Cada módulo o función debe tener una única responsabilidad.
+S (Single Responsibility Principle): Each module or function should have a single responsibility.
 
-O (Open/Closed Principle): Las entidades deben estar abiertas para extensión, pero cerradas para modificación.
+O (Open/Closed Principle): Entities should be open for extension, but closed for modification.
 
-L (Liskov Substitution Principle): Los objetos de un subtipo deben poder ser sustituidos por objetos de su supertipo sin alterar la corrección del programa.
+L (Liskov Substitution Principle): Objects of a subtype should be able to be substituted for objects of their supertype without altering the program's correctness.
 
-I (Interface Segregation Principle): Los clientes no deben ser forzados a depender de interfaces que no utilizan.
+I (Interface Segregation Principle): Clients should not be forced to depend on interfaces they do not use.
 
-D (Dependency Inversion Principle): Los módulos de alto nivel no deben depender de módulos de bajo nivel. Ambos deben depender de abstracciones.
+D (Dependency Inversion Principle): High-level modules should not depend on low-level modules. Both should depend on abstractions.
 
-Comentarios y Documentación: Agrega comentarios claros y concisos en las partes más complejas del código para explicar la lógica.
+Comments and Documentation: Add clear and concise comments in the most complex parts of the code to explain the logic.
 
-Convenciones de Nombres: Usa nombres de variables y funciones descriptivos y coherentes. Prefiere camelCase para JavaScript y kebab-case para clases de CSS.
+Naming Conventions: Use descriptive and consistent names for variables and functions. Prefer camelCase for JavaScript and kebab-case for CSS classes.
 

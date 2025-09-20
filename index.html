@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editor de Markdown</title>
-    <!-- Importar fuente Montserrat desde Google Fonts -->
+    <title>Markdown Editor</title>
+    <!-- Import Montserrat font from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Reset básico y configuración general */
+        /* Basic reset and general configuration */
         * {
             margin: 0;
             padding: 0;
@@ -23,14 +23,14 @@
             line-height: 1.6;
         }
 
-        /* Contenedor principal */
+        /* Main container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        /* Título principal */
+        /* Main title */
         h1 {
             text-align: center;
             color: #2c3e50;
@@ -39,7 +39,7 @@
             font-weight: 300;
         }
 
-        /* Contenedor de las dos columnas */
+        /* Two-column container */
         .editor-container {
             display: flex;
             gap: 20px;
@@ -47,7 +47,7 @@
             min-height: 500px;
         }
 
-        /* Estilos para el editor (columna izquierda) */
+        /* Styles for the editor (left column) */
         .editor-section {
             flex: 1;
             display: flex;
@@ -83,7 +83,7 @@
             font-style: italic;
         }
 
-        /* Estilos para la vista previa (columna derecha) */
+        /* Styles for the preview (right column) */
         .preview-section {
             flex: 1;
             display: flex;
@@ -109,7 +109,7 @@
             font-size: 14px;
         }
 
-        /* Estilos para el contenido renderizado */
+        /* Styles for rendered content */
         #markdown-preview h1,
         #markdown-preview h2,
         #markdown-preview h3,
@@ -221,7 +221,7 @@
             text-decoration: underline;
         }
 
-        /* Botón de copiar */
+        /* Copy button */
         .copy-section {
             margin-top: 20px;
             text-align: center;
@@ -257,7 +257,7 @@
             transform: none;
         }
 
-        /* Mensaje de confirmación */
+        /* Confirmation message */
         .copy-message {
             margin-top: 10px;
             padding: 8px 16px;
@@ -298,101 +298,101 @@
 </head>
 <body>
     <div class="container">
-        <!-- Título principal -->
-        <h1>Editor de Markdown</h1>
+        <!-- Main title -->
+        <h1>Markdown Editor</h1>
         
-        <!-- Contenedor principal con dos columnas -->
+        <!-- Main container with two columns -->
         <div class="editor-container">
-            <!-- Sección del editor (izquierda) -->
+            <!-- Editor section (left) -->
             <div class="editor-section">
                 <label for="markdown-editor" class="editor-label">Editor</label>
                 <textarea 
                     id="markdown-editor" 
-                    placeholder="Escribe tu Markdown aquí..."
+                    placeholder="Write your Markdown here..."
                 ></textarea>
             </div>
             
-            <!-- Sección de vista previa (derecha) -->
+            <!-- Preview section (right) -->
             <div class="preview-section">
-                <label for="markdown-preview" class="preview-label">Vista Previa</label>
+                <label for="markdown-preview" class="preview-label">Preview</label>
                 <div id="markdown-preview"></div>
             </div>
         </div>
         
-        <!-- Sección del botón de copiar -->
+        <!-- Copy button section -->
         <div class="copy-section">
-            <button id="copy-button">Copiar a Portapapeles</button>
+            <button id="copy-button">Copy to Clipboard</button>
             <div id="copy-message" class="copy-message"></div>
         </div>
     </div>
 
-    <!-- Incluir la librería marked.js desde CDN -->
+    <!-- Include marked.js library from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <script>
-        // Configuración de marked.js para mejorar el renderizado
+        // marked.js configuration to improve rendering
         marked.setOptions({
-            breaks: true,        // Convertir saltos de línea en <br>
-            gfm: true,          // Habilitar GitHub Flavored Markdown
-            sanitize: false,    // Permitir HTML (para mayor flexibilidad)
-            smartLists: true,   // Mejorar el renderizado de listas
-            smartypants: true   // Convertir comillas y guiones
+            breaks: true,        // Convert line breaks to <br>
+            gfm: true,          // Enable GitHub Flavored Markdown
+            sanitize: false,    // Allow HTML (for greater flexibility)
+            smartLists: true,   // Improve list rendering
+            smartypants: true   // Convert quotes and dashes
         });
 
-        // Referencias a los elementos del DOM
+        // DOM element references
         const markdownEditor = document.getElementById('markdown-editor');
         const markdownPreview = document.getElementById('markdown-preview');
         const copyButton = document.getElementById('copy-button');
         const copyMessage = document.getElementById('copy-message');
 
         /**
-         * Función para actualizar la vista previa en tiempo real
-         * Se ejecuta cada vez que el usuario escribe en el editor
+         * Function to update the preview in real time
+         * Executes every time the user writes in the editor
          */
         function updatePreview() {
             try {
-                // Obtener el contenido del textarea
+                // Get the textarea content
                 const markdownText = markdownEditor.value;
                 
-                // Convertir Markdown a HTML usando marked.js
+                // Convert Markdown to HTML using marked.js
                 const htmlContent = marked.parse(markdownText);
                 
-                // Actualizar el contenido de la vista previa
+                // Update the preview content
                 markdownPreview.innerHTML = htmlContent;
                 
-                // Si el contenido está vacío, mostrar un mensaje
+                // If content is empty, show a message
                 if (markdownText.trim() === '') {
-                    markdownPreview.innerHTML = '<p style="color: #95a5a6; font-style: italic;">La vista previa aparecerá aquí...</p>';
+                    markdownPreview.innerHTML = '<p style="color: #95a5a6; font-style: italic;">Preview will appear here...</p>';
                 }
             } catch (error) {
-                // En caso de error en el parsing, mostrar mensaje de error
-                markdownPreview.innerHTML = '<p style="color: #e74c3c;">Error al procesar el Markdown: ' + error.message + '</p>';
-                console.error('Error al procesar Markdown:', error);
+                // In case of parsing error, show error message
+                markdownPreview.innerHTML = '<p style="color: #e74c3c;">Error processing Markdown: ' + error.message + '</p>';
+                console.error('Error processing Markdown:', error);
             }
         }
 
         /**
-         * Función para copiar el contenido HTML al portapapeles
+         * Function to copy HTML content to clipboard
          */
         async function copyToClipboard() {
             try {
-                // Obtener el contenido HTML de la vista previa
+                // Get HTML content from preview
                 const htmlContent = markdownPreview.innerHTML;
                 
-                // Verificar que hay contenido para copiar
+                // Check if there is content to copy
                 if (!htmlContent || htmlContent.trim() === '' || 
-                    htmlContent.includes('La vista previa aparecerá aquí...')) {
-                    showCopyMessage('No hay contenido para copiar', 'error');
+                    htmlContent.includes('Preview will appear here...')) {
+                    showCopyMessage('No content to copy', 'error');
                     return;
                 }
 
-                // Usar la API moderna del portapapeles
+                // Use modern clipboard API
                 if (navigator.clipboard && window.isSecureContext) {
-                    // Método moderno (requiere HTTPS)
+                    // Modern method (requires HTTPS)
                     await navigator.clipboard.writeText(htmlContent);
-                    showCopyMessage('¡Contenido copiado al portapapeles!', 'success');
+                    showCopyMessage('Content copied to clipboard!', 'success');
                 } else {
-                    // Método de respaldo para navegadores más antiguos
+                    // Fallback method for older browsers
                     const textArea = document.createElement('textarea');
                     textArea.value = htmlContent;
                     textArea.style.position = 'fixed';
@@ -406,28 +406,28 @@
                     document.body.removeChild(textArea);
                     
                     if (successful) {
-                        showCopyMessage('¡Contenido copiado al portapapeles!', 'success');
+                        showCopyMessage('Content copied to clipboard!', 'success');
                     } else {
-                        showCopyMessage('Error al copiar. Intenta de nuevo.', 'error');
+                        showCopyMessage('Error copying. Try again.', 'error');
                     }
                 }
             } catch (error) {
-                console.error('Error al copiar:', error);
-                showCopyMessage('Error al copiar al portapapeles', 'error');
+                console.error('Error copying:', error);
+                showCopyMessage('Error copying to clipboard', 'error');
             }
         }
 
         /**
-         * Función para mostrar mensajes de confirmación o error
-         * @param {string} message - El mensaje a mostrar
-         * @param {string} type - El tipo de mensaje ('success' o 'error')
+         * Function to show confirmation or error messages
+         * @param {string} message - The message to show
+         * @param {string} type - The message type ('success' or 'error')
          */
         function showCopyMessage(message, type) {
             copyMessage.textContent = message;
             copyMessage.className = `copy-message copy-${type}`;
             copyMessage.style.display = 'block';
             
-            // Ocultar el mensaje después de 3 segundos
+            // Hide the message after 3 seconds
             setTimeout(() => {
                 copyMessage.style.display = 'none';
             }, 3000);
@@ -435,65 +435,65 @@
 
         // Event Listeners
 
-        // Actualizar vista previa en tiempo real cuando se escribe en el editor
+        // Update preview in real time when writing in the editor
         markdownEditor.addEventListener('input', updatePreview);
         
-        // Actualizar vista previa cuando se pega contenido
+        // Update preview when content is pasted
         markdownEditor.addEventListener('paste', () => {
-            // Usar setTimeout para asegurar que el contenido se haya pegado
+            // Use setTimeout to ensure content has been pasted
             setTimeout(updatePreview, 10);
         });
 
-        // Copiar al portapapeles cuando se hace clic en el botón
+        // Copy to clipboard when button is clicked
         copyButton.addEventListener('click', copyToClipboard);
 
-        // Inicializar la vista previa con contenido de ejemplo
+        // Initialize preview with example content
         document.addEventListener('DOMContentLoaded', () => {
-            // Contenido de ejemplo para mostrar las capacidades del editor
-            const exampleMarkdown = `# ¡Bienvenido al Editor de Markdown!
+            // Example content to show editor capabilities
+            const exampleMarkdown = `# Welcome to the Markdown Editor!
 
-Este es un **editor de Markdown** en tiempo real que te permite escribir y ver el resultado instantáneamente.
+This is a real-time **Markdown editor** that allows you to write and see the result instantly.
 
-## Características principales
+## Main Features
 
-- ✅ **Vista previa instantánea** - Los cambios se reflejan inmediatamente
-- ✅ **Soporte completo de Markdown** - Incluyendo tablas, código y más
-- ✅ **Botón de copiar** - Copia el HTML renderizado al portapapeles
+- ✅ **Instant preview** - Changes are reflected immediately
+- ✅ **Full Markdown support** - Including tables, code, and more
+- ✅ **Copy button** - Copies the rendered HTML to clipboard
 
-### Ejemplos de sintaxis
+### Syntax Examples
 
-**Texto en negrita** y *texto en cursiva*
+**Bold text** and *italic text*
 
-> Esta es una cita de ejemplo que muestra cómo se ve el texto citado.
+> This is an example quote that shows how quoted text looks.
 
-#### Lista de tareas
-- [x] Crear la estructura HTML
-- [x] Implementar CSS responsivo
-- [x] Integrar marked.js
-- [ ] Agregar más funcionalidades
+#### Task List
+- [x] Create HTML structure
+- [x] Implement responsive CSS
+- [x] Integrate marked.js
+- [ ] Add more features
 
-#### Código de ejemplo
+#### Example Code
 \`\`\`javascript
-function saludar(nombre) {
-    return "¡Hola, " + nombre + "!";
+function greet(name) {
+    return "Hello, " + name + "!";
 }
 \`\`\`
 
-#### Tabla de ejemplo
-| Característica | Estado |
-|----------------|--------|
-| Vista previa | ✅ |
-| Copiar HTML | ✅ |
+#### Example Table
+| Feature | Status |
+|---------|--------|
+| Preview | ✅ |
+| Copy HTML | ✅ |
 | Responsive | ✅ |
 
 ---
 
-¡Empieza a escribir tu propio Markdown arriba!`;
+Start writing your own Markdown above!`;
 
-            // Establecer el contenido de ejemplo
+            // Set the example content
             markdownEditor.value = exampleMarkdown;
             
-            // Actualizar la vista previa inicial
+            // Update the initial preview
             updatePreview();
         });
     </script>

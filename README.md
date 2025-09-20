@@ -24,7 +24,8 @@ A real-time Markdown editor with instant preview, built with native web technolo
 marwdown-preview/
 ├── index.html          # Main application file
 ├── AGENTS.md           # Development rules and principles
-└── README.md           # Project documentation
+├── README.md           # Project documentation
+└── LICENSE             # MIT License
 ```
 
 ## 🎯 Functionality
@@ -138,7 +139,7 @@ Contributions are welcome. Please:
 
 ## 📄 License
 
-This project is part of Pragmatic Studio and is intended for internal use.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 

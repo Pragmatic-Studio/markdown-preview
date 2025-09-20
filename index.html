@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Markdown</title>
+    <!-- Importar fuente Montserrat desde Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset básico y configuración general */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Título principal */
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+
+        /* Contenedor de las dos columnas */
+        .editor-container {
+            display: flex;
+            gap: 20px;
+            height: 70vh;
+            min-height: 500px;
+        }
+
+        /* Estilos para el editor (columna izquierda) */
+        .editor-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #34495e;
+            font-size: 1.1rem;
+        }
+
+        #markdown-editor {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #markdown-editor:focus {
+            border-color: #3498db;
+        }
+
+        #markdown-editor::placeholder {
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        /* Estilos para la vista previa (columna derecha) */
+        .preview-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #34495e;
+            font-size: 1.1rem;
+        }
+
+        #markdown-preview {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            background-color: white;
+            overflow-y: auto;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+        }
+
+        /* Estilos para el contenido renderizado */
+        #markdown-preview h1,
+        #markdown-preview h2,
+        #markdown-preview h3,
+        #markdown-preview h4,
+        #markdown-preview h5,
+        #markdown-preview h6 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        #markdown-preview h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 28px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        #markdown-preview h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 24px;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+
+        #markdown-preview h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        #markdown-preview h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+        #markdown-preview p {
+            margin-bottom: 15px;
+        }
+
+        #markdown-preview ul,
+        #markdown-preview ol {
+            margin-bottom: 15px;
+            padding-left: 30px;
+        }
+
+        #markdown-preview li {
+            margin-bottom: 5px;
+        }
+
+        #markdown-preview blockquote {
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+            padding-left: 15px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        #markdown-preview code {
+            background-color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        #markdown-preview pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        #markdown-preview pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        #markdown-preview table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        #markdown-preview th,
+        #markdown-preview td {
+            border: 1px solid #bdc3c7;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        #markdown-preview th {
+            background-color: #ecf0f1;
+            font-weight: 600;
+        }
+
+        #markdown-preview a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        #markdown-preview a:hover {
+            text-decoration: underline;
+        }
+
+        /* Botón de copiar */
+        .copy-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #copy-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #copy-button:hover {
+            background-color: #229954;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        #copy-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #copy-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Mensaje de confirmación */
+        .copy-message {
+            margin-top: 10px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .copy-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .copy-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .editor-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .editor-section,
+            .preview-section {
+                min-height: 300px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Título principal -->
+        <h1>Editor de Markdown</h1>
+        
+        <!-- Contenedor principal con dos columnas -->
+        <div class="editor-container">
+            <!-- Sección del editor (izquierda) -->
+            <div class="editor-section">
+                <label for="markdown-editor" class="editor-label">Editor</label>
+                <textarea 
+                    id="markdown-editor" 
+                    placeholder="Escribe tu Markdown aquí..."
+                ></textarea>
+            </div>
+            
+            <!-- Sección de vista previa (derecha) -->
+            <div class="preview-section">
+                <label for="markdown-preview" class="preview-label">Vista Previa</label>
+                <div id="markdown-preview"></div>
+            </div>
+        </div>
+        
+        <!-- Sección del botón de copiar -->
+        <div class="copy-section">
+            <button id="copy-button">Copiar a Portapapeles</button>
+            <div id="copy-message" class="copy-message"></div>
+        </div>
+    </div>
+
+    <!-- Incluir la librería marked.js desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <script>
+        // Configuración de marked.js para mejorar el renderizado
+        marked.setOptions({
+            breaks: true,        // Convertir saltos de línea en <br>
+            gfm: true,          // Habilitar GitHub Flavored Markdown
+            sanitize: false,    // Permitir HTML (para mayor flexibilidad)
+            smartLists: true,   // Mejorar el renderizado de listas
+            smartypants: true   // Convertir comillas y guiones
+        });
+
+        // Referencias a los elementos del DOM
+        const markdownEditor = document.getElementById('markdown-editor');
+        const markdownPreview = document.getElementById('markdown-preview');
+        const copyButton = document.getElementById('copy-button');
+        const copyMessage = document.getElementById('copy-message');
+
+        /**
+         * Función para actualizar la vista previa en tiempo real
+         * Se ejecuta cada vez que el usuario escribe en el editor
+         */
+        function updatePreview() {
+            try {
+                // Obtener el contenido del textarea
+                const markdownText = markdownEditor.value;
+                
+                // Convertir Markdown a HTML usando marked.js
+                const htmlContent = marked.parse(markdownText);
+                
+                // Actualizar el contenido de la vista previa
+                markdownPreview.innerHTML = htmlContent;
+                
+                // Si el contenido está vacío, mostrar un mensaje
+                if (markdownText.trim() === '') {
+                    markdownPreview.innerHTML = '<p style="color: #95a5a6; font-style: italic;">La vista previa aparecerá aquí...</p>';
+                }
+            } catch (error) {
+                // En caso de error en el parsing, mostrar mensaje de error
+                markdownPreview.innerHTML = '<p style="color: #e74c3c;">Error al procesar el Markdown: ' + error.message + '</p>';
+                console.error('Error al procesar Markdown:', error);
+            }
+        }
+
+        /**
+         * Función para copiar el contenido HTML al portapapeles
+         */
+        async function copyToClipboard() {
+            try {
+                // Obtener el contenido HTML de la vista previa
+                const htmlContent = markdownPreview.innerHTML;
+                
+                // Verificar que hay contenido para copiar
+                if (!htmlContent || htmlContent.trim() === '' || 
+                    htmlContent.includes('La vista previa aparecerá aquí...')) {
+                    showCopyMessage('No hay contenido para copiar', 'error');
+                    return;
+                }
+
+                // Usar la API moderna del portapapeles
+                if (navigator.clipboard && window.isSecureContext) {
+                    // Método moderno (requiere HTTPS)
+                    await navigator.clipboard.writeText(htmlContent);
+                    showCopyMessage('¡Contenido copiado al portapapeles!', 'success');
+                } else {
+                    // Método de respaldo para navegadores más antiguos
+                    const textArea = document.createElement('textarea');
+                    textArea.value = htmlContent;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    textArea.style.top = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    
+                    const successful = document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    if (successful) {
+                        showCopyMessage('¡Contenido copiado al portapapeles!', 'success');
+                    } else {
+                        showCopyMessage('Error al copiar. Intenta de nuevo.', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Error al copiar:', error);
+                showCopyMessage('Error al copiar al portapapeles', 'error');
+            }
+        }
+
+        /**
+         * Función para mostrar mensajes de confirmación o error
+         * @param {string} message - El mensaje a mostrar
+         * @param {string} type - El tipo de mensaje ('success' o 'error')
+         */
+        function showCopyMessage(message, type) {
+            copyMessage.textContent = message;
+            copyMessage.className = `copy-message copy-${type}`;
+            copyMessage.style.display = 'block';
+            
+            // Ocultar el mensaje después de 3 segundos
+            setTimeout(() => {
+                copyMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Event Listeners
+
+        // Actualizar vista previa en tiempo real cuando se escribe en el editor
+        markdownEditor.addEventListener('input', updatePreview);
+        
+        // Actualizar vista previa cuando se pega contenido
+        markdownEditor.addEventListener('paste', () => {
+            // Usar setTimeout para asegurar que el contenido se haya pegado
+            setTimeout(updatePreview, 10);
+        });
+
+        // Copiar al portapapeles cuando se hace clic en el botón
+        copyButton.addEventListener('click', copyToClipboard);
+
+        // Inicializar la vista previa con contenido de ejemplo
+        document.addEventListener('DOMContentLoaded', () => {
+            // Contenido de ejemplo para mostrar las capacidades del editor
+            const exampleMarkdown = `# ¡Bienvenido al Editor de Markdown!
+
+Este es un **editor de Markdown** en tiempo real que te permite escribir y ver el resultado instantáneamente.
+
+## Características principales
+
+- ✅ **Vista previa instantánea** - Los cambios se reflejan inmediatamente
+- ✅ **Soporte completo de Markdown** - Incluyendo tablas, código y más
+- ✅ **Botón de copiar** - Copia el HTML renderizado al portapapeles
+
+### Ejemplos de sintaxis
+
+**Texto en negrita** y *texto en cursiva*
+
+> Esta es una cita de ejemplo que muestra cómo se ve el texto citado.
+
+#### Lista de tareas
+- [x] Crear la estructura HTML
+- [x] Implementar CSS responsivo
+- [x] Integrar marked.js
+- [ ] Agregar más funcionalidades
+
+#### Código de ejemplo
+\`\`\`javascript
+function saludar(nombre) {
+    return "¡Hola, " + nombre + "!";
+}
+\`\`\`
+
+#### Tabla de ejemplo
+| Característica | Estado |
+|----------------|--------|
+| Vista previa | ✅ |
+| Copiar HTML | ✅ |
+| Responsive | ✅ |
+
+---
+
+¡Empieza a escribir tu propio Markdown arriba!`;
+
+            // Establecer el contenido de ejemplo
+            markdownEditor.value = exampleMarkdown;
+            
+            // Actualizar la vista previa inicial
+            updatePreview();
+        });
+    </script>
+</body>
+</html>
